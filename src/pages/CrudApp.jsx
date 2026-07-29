@@ -7,13 +7,14 @@ const CrudApp = () => {
   // Estados de la aplicación
   const [db, setDb] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
-  const [loading, setLoading] = useState(true); // Nuevo estado para la carga
-  
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const modalRef = useRef(null);
   const bsModalRef = useRef(null);
 
-  // URL de nuestra API simulada (json-server)
-  const API_URL = "http://localhost:5000/products";
+  // URL de JSON Server (puerto 3001, recurso "products")
+  const API_URL = "http://localhost:3001/products";
 
   // 1. READ: Obtener datos al cargar el componente
   useEffect(() => {
@@ -23,17 +24,18 @@ const CrudApp = () => {
         if (!response.ok) throw new Error("Error al obtener los datos");
         const data = await response.json();
         setDb(data);
-      } catch (error) {
-        console.error("Error:", error);
+        setError(null);
+      } catch (err) {
+        console.error("Error:", err);
+        setError("No se pudieron cargar los productos. ¿Está corriendo JSON Server en el puerto 3001?");
       } finally {
-        // Apagamos el estado de carga sin importar si la petición falló o tuvo éxito
-        setLoading(false); 
+        setLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  // Funciones para manejar el Modal de Bootstrap
+  // Funciones para el Modal
   const getModalInstance = () => {
     if (!bsModalRef.current) {
       bsModalRef.current = new Modal(modalRef.current);
@@ -56,7 +58,7 @@ const CrudApp = () => {
     setDataToEdit(null);
   };
 
-  // 2. CREATE: Enviar un nuevo producto por POST
+  // 2. CREATE
   const createData = async (newItem) => {
     const quantityNum = Number(newItem.quantity);
     const unitPriceNum = Number(newItem.unitPrice);
@@ -75,16 +77,15 @@ const CrudApp = () => {
         body: JSON.stringify(itemToAdd),
       });
       if (!response.ok) throw new Error("Error al crear el producto");
-      
       const savedItem = await response.json();
       setDb([...db, savedItem]);
       closeModal();
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (err) {
+      alert("No se pudo crear el producto. " + err.message);
     }
   };
 
-  // 3. UPDATE: Actualizar un producto por PUT
+  // 3. UPDATE
   const updateData = async (updatedItem) => {
     const quantityNum = Number(updatedItem.quantity);
     const unitPriceNum = Number(updatedItem.unitPrice);
@@ -103,58 +104,61 @@ const CrudApp = () => {
         body: JSON.stringify(itemToUpdate),
       });
       if (!response.ok) throw new Error("Error al actualizar el producto");
-      
       const savedItem = await response.json();
-      const newDb = db.map((item) =>
-        item.id === savedItem.id ? savedItem : item
-      );
-      setDb(newDb);
+      setDb(db.map((item) => (item.id === savedItem.id ? savedItem : item)));
       closeModal();
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (err) {
+      alert("No se pudo actualizar. " + err.message);
     }
   };
 
-  // 4. DELETE: Eliminar un producto por DELETE
+  // 4. DELETE
   const deleteData = async (id) => {
     const confirmDelete = window.confirm(
       "¿Está seguro de eliminar este producto?"
     );
-    if (confirmDelete) {
-      try {
-        const response = await fetch(`${API_URL}/${id}`, {
-          method: "DELETE",
-        });
-        if (!response.ok) throw new Error("Error al eliminar el producto");
+    if (!confirmDelete) return;
 
-        const newDb = db.filter((item) => item.id !== id);
-        setDb(newDb);
-        if (dataToEdit && dataToEdit.id === id) {
-          setDataToEdit(null);
-        }
-      } catch (error) {
-        console.error("Error:", error);
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Error al eliminar el producto");
+      setDb(db.filter((item) => item.id !== id));
+      if (dataToEdit && dataToEdit.id === id) {
+        setDataToEdit(null);
       }
+    } catch (err) {
+      alert("No se pudo eliminar. " + err.message);
     }
   };
 
+  // Renderizado
   return (
     <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="m-0">📦 Almacén </h1>
+        <h1 className="m-0">📦 Almacén</h1>
         <button className="btn btn-primary" onClick={openModalToCreate}>
           ➕ Agregar Producto
         </button>
       </div>
 
-      {/* Condicional: Si está cargando, mostramos el spinner. Si no, la tabla */}
-      {loading ? (
+      {/* Indicador de carga */}
+      {loading && (
         <div className="d-flex justify-content-center my-5">
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Cargando...</span>
           </div>
         </div>
-      ) : (
+      )}
+
+      {/* Mensaje de error */}
+      {error && !loading && (
+        <div className="alert alert-danger">{error}</div>
+      )}
+
+      {/* Tabla de datos */}
+      {!loading && !error && (
         <CrudTable
           data={db}
           deleteData={deleteData}
@@ -162,7 +166,7 @@ const CrudApp = () => {
         />
       )}
 
-      {/* Modal de Bootstrap para el Formulario */}
+      {/* Modal de Bootstrap */}
       <div
         className="modal fade"
         ref={modalRef}

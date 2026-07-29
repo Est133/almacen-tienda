@@ -133,8 +133,7 @@
       "product": "Harina de Trigo 000 1kg",
       "quantity": 7,
       "unitPrice": 1650.25,
-      "total": 11551.75,
-      "server": "json-server --watch db.json --port 5000"
+      "total": 11551.75
     }
   ],
   "categories": [

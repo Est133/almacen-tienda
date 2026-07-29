@@ -10,24 +10,31 @@ const initialForm = {
 
 const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
   const [form, setForm] = useState(initialForm);
-  const [categories, setCategories] = useState([]); // ⬅️ Nuevo estado para las categorías
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [errorCategories, setErrorCategories] = useState(null);
   const isEditing = Boolean(dataToEdit);
 
-  // ⬅️ Petición GET para cargar las categorías al abrir el formulario
+  // GET: obtener categorías desde JSON Server
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:5000/categories");
+        const response = await fetch("http://localhost:3001/categories");
         if (!response.ok) throw new Error("Error al obtener las categorías");
         const data = await response.json();
         setCategories(data);
+        setErrorCategories(null);
       } catch (error) {
         console.error("Error:", error);
+        setErrorCategories("No se pudieron cargar las categorías.");
+      } finally {
+        setLoadingCategories(false);
       }
     };
     fetchCategories();
   }, []);
 
+  // Sincronizar formulario con dataToEdit (edición)
   useEffect(() => {
     if (dataToEdit) {
       setForm(dataToEdit);
@@ -82,20 +89,28 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
       {/* Categoría */}
       <div className="col-md-6">
         <label className="form-label">Categoría</label>
-        <select
-          name="category"
-          className="form-select"
-          value={form.category}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Seleccione una categoría</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.name}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
+        {loadingCategories ? (
+          <select className="form-select" disabled>
+            <option>Cargando categorías...</option>
+          </select>
+        ) : errorCategories ? (
+          <div className="text-danger small">{errorCategories}</div>
+        ) : (
+          <select
+            name="category"
+            className="form-select"
+            value={form.category}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Seleccione una categoría</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       {/* Producto */}
