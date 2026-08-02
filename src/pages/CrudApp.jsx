@@ -35,7 +35,7 @@ const CrudApp = () => {
     fetchData();
   }, []);
 
-  // Funciones para el Modal
+  // Funciones para el Modal GET SE PINTA POR PRIMERA VEZ CUANDO SE CREA EL MODAL, Y LUEGO SE REUTILIZA
   const getModalInstance = () => {
     if (!bsModalRef.current) {
       bsModalRef.current = new Modal(modalRef.current);
@@ -59,15 +59,15 @@ const CrudApp = () => {
   };
 
   // 2. CREATE
-  const createData = async (newItem) => {
-    const quantityNum = Number(newItem.quantity);
-    const unitPriceNum = Number(newItem.unitPrice);
+  const createData = async (nuevoItem) => {
+    const cantidad = Number(nuevoItem.cantidad);
+    const precioUnico = Number(nuevoItem.precioUnitario);
 
     const itemToAdd = {
-      ...newItem,
-      quantity: quantityNum,
-      unitPrice: Number(unitPriceNum.toFixed(2)),
-      total: Number((quantityNum * unitPriceNum).toFixed(2)),
+      ...nuevoItem,
+      cantidad: cantidad,
+      precioUnitario: Number(precioUnico.toFixed(2)),
+      total: Number((cantidad * precioUnico).toFixed(2)),
     };
 
     try {
@@ -87,14 +87,14 @@ const CrudApp = () => {
 
   // 3. UPDATE
   const updateData = async (updatedItem) => {
-    const quantityNum = Number(updatedItem.quantity);
-    const unitPriceNum = Number(updatedItem.unitPrice);
+    const cantidad = Number(updatedItem.quantity);
+    const precioUnico = Number(updatedItem.unitPrice);
 
     const itemToUpdate = {
       ...updatedItem,
-      quantity: quantityNum,
-      unitPrice: Number(unitPriceNum.toFixed(2)),
-      total: Number((quantityNum * unitPriceNum).toFixed(2)),
+      quantity: cantidad,
+      unitPrice: Number(precioUnico.toFixed(2)),
+      total: Number((cantidad * precioUnico).toFixed(2)),
     };
 
     try {
@@ -143,7 +143,6 @@ const CrudApp = () => {
         </button>
       </div>
 
-      {/* Indicador de carga */}
       {loading && (
         <div className="d-flex justify-content-center my-5">
           <div className="spinner-border text-primary" role="status">
@@ -152,12 +151,10 @@ const CrudApp = () => {
         </div>
       )}
 
-      {/* Mensaje de error */}
       {error && !loading && (
         <div className="alert alert-danger">{error}</div>
       )}
 
-      {/* Tabla de datos */}
       {!loading && !error && (
         <CrudTable
           data={db}
@@ -166,7 +163,6 @@ const CrudApp = () => {
         />
       )}
 
-      {/* Modal de Bootstrap */}
       <div
         className="modal fade"
         ref={modalRef}
