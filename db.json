@@ -125,15 +125,6 @@
       "cantidad": 7,
       "precioUnitario": 1650.25,
       "total": 11551.75
-    },
-    {
-      "categoria": "Lácteos",
-      "producto": "Leche Manfrey",
-      "cantidad": 1,
-      "precioUnitario": 2000,
-      "fecha": "2/8/2026",
-      "total": 2000,
-      "id": "-sTzZ_tMjRU"
     }
   ],
   "categories": [

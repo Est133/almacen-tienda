@@ -1,11 +1,11 @@
 const CrudTableRow = ({ row, onEdit, deleteData }) => {
   return (
     <tr>
-      <td>{row.date}</td>
-      <td>{row.category}</td>
-      <td>{row.product}</td>
-      <td>${row.unitPrice}</td>
-      <td>{row.quantity}</td>
+      <td>{row.fecha}</td>
+      <td>{row.categoria}</td>
+      <td>{row.producto}</td>
+      <td>${row.precioUnitario}</td>
+      <td>{row.cantidad}</td>
       <td>${row.total}</td>
       <td className="text-center">
         <button

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
 const initialForm = {
-  category: "",
-  product: "",
-  quantity: "",
-  unitPrice: "",
-  date: new Date().toLocaleDateString("es-AR"),
+  categoria: "",
+  producto: "",      
+  cantidad: "",
+  precioUnitario: "",
+  fecha: new Date().toLocaleDateString("es-AR"),
 };
 
 const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
@@ -53,13 +53,13 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!form.category || !form.product || !form.quantity || !form.unitPrice) {
+    if (!form.categoria || !form.producto || !form.cantidad || !form.precioUnitario) {
       alert("Todos los campos son obligatorios");
       return;
     }
 
-    const quantityNum = Number(form.quantity);
-    const unitPriceNum = Number(form.unitPrice);
+    const quantityNum = Number(form.cantidad);
+    const unitPriceNum = Number(form.precioUnitario);
 
     if (quantityNum <= 0 || unitPriceNum <= 0) {
       alert("Cantidad y Precio Unitario deben ser mayores a 0");
@@ -69,15 +69,15 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
     if (isEditing) {
       updateData({
         ...form,
-        quantity: quantityNum,
-        unitPrice: unitPriceNum,
+        cantidad: quantityNum,
+        precioUnitario: unitPriceNum,
       });
     } else {
       createData({
         ...form,
-        quantity: quantityNum,
-        unitPrice: unitPriceNum,
-        date: new Date().toLocaleDateString("es-AR"),
+        cantidad: quantityNum,
+        precioUnitario: unitPriceNum,
+        fecha: new Date().toLocaleDateString("es-AR"),
       });
     }
 
@@ -97,9 +97,9 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
           <div className="text-danger small">{errorCategories}</div>
         ) : (
           <select
-            name="category"
+            name="categoria"
             className="form-select"
-            value={form.category}
+            value={form.categoria}
             onChange={handleChange}
             required
           >
@@ -118,10 +118,10 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
         <label className="form-label">Producto</label>
         <input
           type="text"
-          name="product"
+          name="producto"
           className="form-control"
           placeholder="Nombre del producto"
-          value={form.product}
+          value={form.producto}
           onChange={handleChange}
           required
         />
@@ -132,10 +132,10 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
         <label className="form-label">Cantidad</label>
         <input
           type="number"
-          name="quantity"
+          name="cantidad"
           className="form-control"
           placeholder="Cantidad"
-          value={form.quantity}
+          value={form.cantidad}
           onChange={handleChange}
           min="1"
           required
@@ -147,10 +147,10 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
         <label className="form-label">Precio Unitario $</label>
         <input
           type="number"
-          name="unitPrice"
+          name="precioUnitario"
           className="form-control"
           placeholder="Precio Unitario $"
-          value={form.unitPrice}
+          value={form.precioUnitario}
           onChange={handleChange}
           step="0.01"
           min="0.01"

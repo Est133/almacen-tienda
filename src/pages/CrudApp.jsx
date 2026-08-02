@@ -14,7 +14,7 @@ const CrudApp = () => {
   const bsModalRef = useRef(null);
 
   // URL de JSON Server (puerto 3001, recurso "products")
-  const API_URL = "http://localhost:3001/products";
+  const API_URL = "http://localhost:3001/productos";
 
   // 1. READ: Obtener datos al cargar el componente
   useEffect(() => {
@@ -87,13 +87,13 @@ const CrudApp = () => {
 
   // 3. UPDATE
   const updateData = async (updatedItem) => {
-    const cantidad = Number(updatedItem.quantity);
-    const precioUnico = Number(updatedItem.unitPrice);
+    const cantidad = Number(updatedItem.cantidad);
+    const precioUnico = Number(updatedItem.precioUnitario);
 
     const itemToUpdate = {
       ...updatedItem,
-      quantity: cantidad,
-      unitPrice: Number(precioUnico.toFixed(2)),
+      cantidad: cantidad,
+      precioUnitario: Number(precioUnico.toFixed(2)),
       total: Number((cantidad * precioUnico).toFixed(2)),
     };
 
