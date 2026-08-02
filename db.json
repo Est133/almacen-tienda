@@ -1,15 +1,6 @@
 {
   "productos": [
     {
-      "id": "1",
-      "fecha": "05/01/2026",
-      "categoria": "Comestibles",
-      "producto": "Arroz Largo Fino 1kg",
-      "cantidad": 8,
-      "precioUnitario": 2850.5,
-      "total": 22804
-    },
-    {
       "id": "2",
       "fecha": "08/01/2026",
       "categoria": "Comestibles",
@@ -125,9 +116,18 @@
       "cantidad": 7,
       "precioUnitario": 1650.25,
       "total": 11551.75
+    },
+    {
+      "categoria": "Comestibles",
+      "producto": "Leche",
+      "cantidad": 1,
+      "precioUnitario": 3333,
+      "fecha": "2/8/2026",
+      "total": 3333,
+      "id": "ByhJgoWrcXo"
     }
   ],
-  "categories": [
+  "categorias": [
     {
       "id": "1",
       "name": "Comestibles"

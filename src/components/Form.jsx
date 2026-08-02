@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 
-const initialForm = {
+const formularioInicial = {
   categoria: "",
   producto: "",      
   cantidad: "",
@@ -8,103 +9,109 @@ const initialForm = {
   fecha: new Date().toLocaleDateString("es-AR"),
 };
 
-const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
-  const [form, setForm] = useState(initialForm);
-  const [categories, setCategories] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
-  const [errorCategories, setErrorCategories] = useState(null);
-  const isEditing = Boolean(dataToEdit);
+const CrudForm = ({ crearDato, actualizarDato, datoAEditar, alCancelar }) => {
+  // Variables de estado traducidas
+  const [formulario, setFormulario] = useState(formularioInicial);
+  const [categorias, setCategorias] = useState([]);
+  const [cargandoCategorias, setCargandoCategorias] = useState(true);
+  const [errorCategorias, setErrorCategorias] = useState(null);
+  
+  // Variable booleana para saber si editamos o creamos
+  const estaEditando = Boolean(datoAEditar);
 
   // GET: obtener categorías desde JSON Server
   useEffect(() => {
-    const fetchCategories = async () => {
+    const obtenerCategorias = async () => {
       try {
-        const response = await fetch("http://localhost:3001/categories");
+        const response = await fetch("http://localhost:3001/categorias");
         if (!response.ok) throw new Error("Error al obtener las categorías");
         const data = await response.json();
-        setCategories(data);
-        setErrorCategories(null);
+        setCategorias(data);
+        setErrorCategorias(null);
       } catch (error) {
         console.error("Error:", error);
-        setErrorCategories("No se pudieron cargar las categorías.");
+        setErrorCategorias("No se pudieron cargar las categorías.");
       } finally {
-        setLoadingCategories(false);
+        setCargandoCategorias(false);
       }
     };
-    fetchCategories();
+    obtenerCategorias();
   }, []);
 
-  // Sincronizar formulario con dataToEdit (edición)
+  // Sincronizar formulario con datoAEditar (edición)
   useEffect(() => {
-    if (dataToEdit) {
-      setForm(dataToEdit);
+    if (datoAEditar) {
+      setFormulario(datoAEditar);
     } else {
-      setForm(initialForm);
+      setFormulario(formularioInicial);
     }
-  }, [dataToEdit]);
+  }, [datoAEditar]);
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
+  // Función para leer el teclado
+  const manejarCambio = (e) => {
+    setFormulario({
+      ...formulario,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  // Función para guardar el formulario
+  const manejarEnvio = (e) => {
     e.preventDefault();
 
-    if (!form.categoria || !form.producto || !form.cantidad || !form.precioUnitario) {
+    if (!formulario.categoria || !formulario.producto || !formulario.cantidad || !formulario.precioUnitario) {
       alert("Todos los campos son obligatorios");
       return;
     }
 
-    const quantityNum = Number(form.cantidad);
-    const unitPriceNum = Number(form.precioUnitario);
+    const cantidadNum = Number(formulario.cantidad);
+    const precioUnitarioNum = Number(formulario.precioUnitario);
 
-    if (quantityNum <= 0 || unitPriceNum <= 0) {
+    if (cantidadNum <= 0 || precioUnitarioNum <= 0) {
       alert("Cantidad y Precio Unitario deben ser mayores a 0");
       return;
     }
 
-    if (isEditing) {
-      updateData({
-        ...form,
-        cantidad: quantityNum,
-        precioUnitario: unitPriceNum,
+    if (estaEditando) {
+      actualizarDato({
+        ...formulario,
+        cantidad: cantidadNum,
+        precioUnitario: precioUnitarioNum,
       });
     } else {
-      createData({
-        ...form,
-        cantidad: quantityNum,
-        precioUnitario: unitPriceNum,
+      crearDato({
+        ...formulario,
+        cantidad: cantidadNum,
+        precioUnitario: precioUnitarioNum,
         fecha: new Date().toLocaleDateString("es-AR"),
       });
     }
 
-    setForm(initialForm);
+    setFormulario(formularioInicial);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="row g-3">
+    <form onSubmit={manejarEnvio} className="row g-3">
       {/* Categoría */}
       <div className="col-md-6">
         <label className="form-label">Categoría</label>
-        {loadingCategories ? (
+        {cargandoCategorias ? (
           <select className="form-select" disabled>
             <option>Cargando categorías...</option>
           </select>
-        ) : errorCategories ? (
-          <div className="text-danger small">{errorCategories}</div>
+        ) : errorCategorias ? (
+          <div className="text-danger small">{errorCategorias}</div>
         ) : (
           <select
             name="categoria"
             className="form-select"
-            value={form.categoria}
-            onChange={handleChange}
+            value={formulario.categoria}
+            onChange={manejarCambio}
             required
           >
             <option value="">Seleccione una categoría</option>
-            {categories.map((cat) => (
+            {/* OJO AQUÍ: Si tu base de datos dice "nombre" en vez de "name", cámbialo abajo */}
+            {categorias.map((cat) => (
               <option key={cat.id} value={cat.name}>
                 {cat.name}
               </option>
@@ -121,8 +128,8 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
           name="producto"
           className="form-control"
           placeholder="Nombre del producto"
-          value={form.producto}
-          onChange={handleChange}
+          value={formulario.producto}
+          onChange={manejarCambio}
           required
         />
       </div>
@@ -135,8 +142,8 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
           name="cantidad"
           className="form-control"
           placeholder="Cantidad"
-          value={form.cantidad}
-          onChange={handleChange}
+          value={formulario.cantidad}
+          onChange={manejarCambio}
           min="1"
           required
         />
@@ -150,8 +157,8 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
           name="precioUnitario"
           className="form-control"
           placeholder="Precio Unitario $"
-          value={form.precioUnitario}
-          onChange={handleChange}
+          value={formulario.precioUnitario}
+          onChange={manejarCambio}
           step="0.01"
           min="0.01"
           required
@@ -163,12 +170,12 @@ const CrudForm = ({ createData, updateData, dataToEdit, onCancel }) => {
         <button
           type="button"
           className="btn btn-outline-secondary"
-          onClick={onCancel}
+          onClick={alCancelar}
         >
           Cancelar
         </button>
         <button type="submit" className="btn btn-primary">
-          {isEditing ? "Aceptar" : "Agregar"}
+          {estaEditando ? "Aceptar" : "Agregar"}
         </button>
       </div>
     </form>
