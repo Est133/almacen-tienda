@@ -125,6 +125,15 @@
       "cantidad": 7,
       "precioUnitario": 1650.25,
       "total": 11551.75
+    },
+    {
+      "categoria": "Comestibles",
+      "producto": "Leche",
+      "cantidad": 1,
+      "precioUnitario": 4444,
+      "fecha": "2/8/2026",
+      "total": 4444,
+      "id": "b0zVQF-O8rM"
     }
   ],
   "categories": [
@@ -148,5 +157,6 @@
       "id": "5",
       "name": "Descartables"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
