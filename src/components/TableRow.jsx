@@ -18,7 +18,7 @@ const CrudTableRow = ({ row, onEdit, deleteData }) => {
           className="btn btn-sm btn-danger"
           onClick={() => deleteData(row.id)}
         >
-          🗑️ Eliminar
+          🗑️ Borrar
         </button>
       </td>
     </tr>
