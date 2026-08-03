@@ -1,25 +1,22 @@
+// 
 const CrudTableRow = ({ row, onEdit, deleteData }) => {
   return (
     <tr>
-      <td>{row.fecha}</td>
-      <td>{row.categoria}</td>
+      <td className="d-none d-md-table-cell">{row.fecha}</td>
+      <td className="d-none d-md-table-cell">{row.categoria}</td>
       <td>{row.producto}</td>
-      <td>${row.precioUnitario}</td>
+      <td className="d-none d-md-table-cell">${row.precioUnitario}</td>
       <td>{row.cantidad}</td>
       <td>${row.total}</td>
       <td className="text-center">
-        <button
-          className="btn btn-sm btn-warning me-2"
-          onClick={() => onEdit(row)}
-        >
-          ✏️ Editar
-        </button>
-        <button
-          className="btn btn-sm btn-danger"
-          onClick={() => deleteData(row.id)}
-        >
-          🗑️ Eliminar
-        </button>
+        <div className="d-flex justify-content-center gap-1">
+          <button className="btn btn-warning btn-sm" onClick={() => onEdit(row)}>
+            ✏️ <span className="d-none d-md-inline">Editar</span>
+          </button>
+          <button className="btn btn-danger btn-sm" onClick={() => deleteData(row.id)}>
+            🗑️ <span className="d-none d-md-inline">Eliminar</span>
+          </button>
+        </div>
       </td>
     </tr>
   );

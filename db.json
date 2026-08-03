@@ -24,8 +24,8 @@
       "categoria": "Lácteos",
       "producto": "Queso Cremoso 1kg",
       "cantidad": 3,
-      "precioUnitario": 8950,
-      "total": 26850
+      "precioUnitario": 8949.99,
+      "total": 26849.97
     },
     {
       "id": "5",
@@ -125,6 +125,15 @@
       "fecha": "2/8/2026",
       "total": 3333,
       "id": "ByhJgoWrcXo"
+    },
+    {
+      "categoria": "Comestibles",
+      "producto": "Leche",
+      "cantidad": 1,
+      "precioUnitario": 234,
+      "fecha": "2/8/2026",
+      "total": 234,
+      "id": "n6PdruRRF1c"
     }
   ],
   "categorias": [
@@ -148,5 +157,6 @@
       "id": "5",
       "name": "Descartables"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
