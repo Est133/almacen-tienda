@@ -121,6 +121,7 @@
       "categoria": "Comestibles",
       "producto": "Leche",
       "cantidad": 1,
+<<<<<<< HEAD
       "precioUnitario": 3333,
       "fecha": "2/8/2026",
       "total": 3333,
@@ -134,6 +135,12 @@
       "fecha": "2/8/2026",
       "total": 234,
       "id": "n6PdruRRF1c"
+=======
+      "precioUnitario": 4444,
+      "fecha": "2/8/2026",
+      "total": 4444,
+      "id": "b0zVQF-O8rM"
+>>>>>>> 5b5967f25fc560894562777455dc61d9f0153b13
     }
   ],
   "categorias": [
