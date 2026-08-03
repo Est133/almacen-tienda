@@ -1,11 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-<<<<<<< HEAD
-import CrudForm from "../components/Form";
-import CrudTable from "../components/crudTable";
-=======
 import CrudForm from "../components/CrudForm";
 import CrudTable from "../components/CrudTable";
->>>>>>> 5b5967f25fc560894562777455dc61d9f0153b13
 import { Modal } from "bootstrap";
 
 const CrudApp = () => {
