@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import CrudForm from "../components/CrudForm";
-import CrudTable from "../components/CrudTable";
+import Form from "../components/ComponenteForm";
+import Table from "../components/ComponenteTable";
 import { Modal } from "bootstrap";
 
-const CrudApp = () => {
-  // Estados de la aplicación traducidos
+const PaginaPrincipal = () => {
   const [baseDatos, setBaseDatos] = useState([]);
   const [datoAEditar, setDatoAEditar] = useState(null);
   const [cargando, setCargando] = useState(true);
@@ -13,10 +12,9 @@ const CrudApp = () => {
   const referenciaModal = useRef(null);
   const referenciaInstanciaBs = useRef(null);
 
-  // URL de JSON Server (puerto 3001, recurso "productos")
   const URL_API = "http://localhost:3001/productos";
 
-  // 1. READ: Obtener datos al cargar el componente
+  // 1. READ
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
@@ -27,7 +25,9 @@ const CrudApp = () => {
         setError(null);
       } catch (err) {
         console.error("Error:", err);
-        setError("No se pudieron cargar los productos. ¿Está corriendo JSON Server en el puerto 3001?");
+        setError(
+          "No se pudieron cargar los productos. ¿Está corriendo JSON Server en el puerto 3001?",
+        );
       } finally {
         setCargando(false);
       }
@@ -35,7 +35,6 @@ const CrudApp = () => {
     obtenerDatos();
   }, []);
 
-  // Funciones para el Modal
   const obtenerInstanciaModal = () => {
     if (!referenciaInstanciaBs.current) {
       referenciaInstanciaBs.current = new Modal(referenciaModal.current);
@@ -58,7 +57,7 @@ const CrudApp = () => {
     setDatoAEditar(null);
   };
 
-  // 2. CREATE: Crear un nuevo registro
+  // 2. CREATE
   const crearDato = async (nuevoItem) => {
     const cantidad = Number(nuevoItem.cantidad);
     const precioUnico = Number(nuevoItem.precioUnitario);
@@ -85,7 +84,7 @@ const CrudApp = () => {
     }
   };
 
-  // 3. UPDATE: Actualizar registro existente
+  // 3. UPDATE
   const actualizarDato = async (itemActualizado) => {
     const cantidad = Number(itemActualizado.cantidad);
     const precioUnico = Number(itemActualizado.precioUnitario);
@@ -105,10 +104,11 @@ const CrudApp = () => {
       });
       if (!respuesta.ok) throw new Error("Error al actualizar el producto");
       const itemGuardado = await respuesta.json();
-      
-      // Reemplazamos únicamente el objeto editado en el estado
+
       setBaseDatos(
-        baseDatos.map((item) => (item.id === itemGuardado.id ? itemGuardado : item))
+        baseDatos.map((item) =>
+          item.id === itemGuardado.id ? itemGuardado : item,
+        ),
       );
       cerrarModal();
     } catch (err) {
@@ -119,7 +119,7 @@ const CrudApp = () => {
   // 4. DELETE: Eliminar registro
   const eliminarDato = async (id) => {
     const confirmarEliminacion = window.confirm(
-      "¿Está seguro de eliminar este producto?"
+      "¿Está seguro de eliminar este producto?",
     );
     if (!confirmarEliminacion) return;
 
@@ -128,8 +128,7 @@ const CrudApp = () => {
         method: "DELETE",
       });
       if (!respuesta.ok) throw new Error("Error al eliminar el producto");
-      
-      // Filtramos la base de datos eliminando el item seleccionado
+
       setBaseDatos(baseDatos.filter((item) => item.id !== id));
       if (datoAEditar && datoAEditar.id === id) {
         setDatoAEditar(null);
@@ -157,12 +156,10 @@ const CrudApp = () => {
         </div>
       )}
 
-      {error && !cargando && (
-        <div className="alert alert-danger">{error}</div>
-      )}
+      {error && !cargando && <div className="alert alert-danger">{error}</div>}
 
       {!cargando && !error && (
-        <CrudTable
+        <Table
           data={baseDatos}
           deleteData={eliminarDato}
           onEdit={abrirModalEditar}
@@ -188,8 +185,7 @@ const CrudApp = () => {
               ></button>
             </div>
             <div className="modal-body">
-              {/* Conexión directa de Props en español con CrudForm */}
-              <CrudForm
+              <Form
                 crearDato={crearDato}
                 actualizarDato={actualizarDato}
                 datoAEditar={datoAEditar}
@@ -203,4 +199,4 @@ const CrudApp = () => {
   );
 };
 
-export default CrudApp;
+export default PaginaPrincipal;

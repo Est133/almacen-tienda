@@ -1,6 +1,6 @@
-import CrudTableRow from "./TableRow";
+import TableRow from "./ComponenteTableRow";
 
-const CrudTable = ({ data, onEdit, deleteData }) => {
+const Table = ({ data, onEdit, deleteData }) => {
   if (!data || data.length === 0) {
     return (
       <div className="text-center py-5">
@@ -25,7 +25,7 @@ const CrudTable = ({ data, onEdit, deleteData }) => {
         </thead>
         <tbody>
           {data.map((row) => (
-            <CrudTableRow
+            <TableRow
               key={row.id}
               row={row}
               onEdit={onEdit}
@@ -38,4 +38,4 @@ const CrudTable = ({ data, onEdit, deleteData }) => {
   );
 };
 
-export default CrudTable;
+export default Table;

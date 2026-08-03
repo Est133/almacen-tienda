@@ -1,5 +1,4 @@
-// 
-const CrudTableRow = ({ row, onEdit, deleteData }) => {
+const TableRow = ({ row, onEdit, deleteData }) => {
   return (
     <tr>
       <td className="d-none d-md-table-cell">{row.fecha}</td>
@@ -10,10 +9,16 @@ const CrudTableRow = ({ row, onEdit, deleteData }) => {
       <td>${row.total}</td>
       <td className="text-center">
         <div className="d-flex justify-content-center gap-1">
-          <button className="btn btn-warning btn-sm" onClick={() => onEdit(row)}>
+          <button
+            className="btn btn-warning btn-sm"
+            onClick={() => onEdit(row)}
+          >
             ✏️ <span className="d-none d-md-inline">Editar</span>
           </button>
-          <button className="btn btn-danger btn-sm" onClick={() => deleteData(row.id)}>
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={() => deleteData(row.id)}
+          >
             🗑️ <span className="d-none d-md-inline">Eliminar</span>
           </button>
         </div>
@@ -22,4 +27,4 @@ const CrudTableRow = ({ row, onEdit, deleteData }) => {
   );
 };
 
-export default CrudTableRow;
+export default TableRow;

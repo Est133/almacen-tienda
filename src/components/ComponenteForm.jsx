@@ -1,25 +1,21 @@
-
 import { useState, useEffect } from "react";
 
 const formularioInicial = {
   categoria: "",
-  producto: "",      
+  producto: "",
   cantidad: "",
   precioUnitario: "",
   fecha: new Date().toLocaleDateString("es-AR"),
 };
 
-const CrudForm = ({ crearDato, actualizarDato, datoAEditar, alCancelar }) => {
-  // Variables de estado traducidas
+const Form = ({ crearDato, actualizarDato, datoAEditar, alCancelar }) => {
   const [formulario, setFormulario] = useState(formularioInicial);
   const [categorias, setCategorias] = useState([]);
   const [cargandoCategorias, setCargandoCategorias] = useState(true);
   const [errorCategorias, setErrorCategorias] = useState(null);
-  
-  // Variable booleana para saber si editamos o creamos
+
   const estaEditando = Boolean(datoAEditar);
 
-  // GET: obtener categorías desde JSON Server
   useEffect(() => {
     const obtenerCategorias = async () => {
       try {
@@ -38,7 +34,6 @@ const CrudForm = ({ crearDato, actualizarDato, datoAEditar, alCancelar }) => {
     obtenerCategorias();
   }, []);
 
-  // Sincronizar formulario con datoAEditar (edición)
   useEffect(() => {
     if (datoAEditar) {
       setFormulario(datoAEditar);
@@ -47,7 +42,6 @@ const CrudForm = ({ crearDato, actualizarDato, datoAEditar, alCancelar }) => {
     }
   }, [datoAEditar]);
 
-  // Función para leer el teclado
   const manejarCambio = (e) => {
     setFormulario({
       ...formulario,
@@ -55,11 +49,15 @@ const CrudForm = ({ crearDato, actualizarDato, datoAEditar, alCancelar }) => {
     });
   };
 
-  // Función para guardar el formulario
   const manejarEnvio = (e) => {
     e.preventDefault();
 
-    if (!formulario.categoria || !formulario.producto || !formulario.cantidad || !formulario.precioUnitario) {
+    if (
+      !formulario.categoria ||
+      !formulario.producto ||
+      !formulario.cantidad ||
+      !formulario.precioUnitario
+    ) {
       alert("Todos los campos son obligatorios");
       return;
     }
@@ -110,7 +108,6 @@ const CrudForm = ({ crearDato, actualizarDato, datoAEditar, alCancelar }) => {
             required
           >
             <option value="">Seleccione una categoría</option>
-            {/* OJO AQUÍ: Si tu base de datos dice "nombre" en vez de "name", cámbialo abajo */}
             {categorias.map((cat) => (
               <option key={cat.id} value={cat.name}>
                 {cat.name}
@@ -182,4 +179,4 @@ const CrudForm = ({ crearDato, actualizarDato, datoAEditar, alCancelar }) => {
   );
 };
 
-export default CrudForm;
+export default Form;
