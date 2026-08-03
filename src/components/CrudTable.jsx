@@ -11,7 +11,8 @@ const CrudTable = ({ data, onEdit, deleteData }) => {
 
   return (
     <div className="table-responsive">
-      <table className="table table-striped table-hover align-middle">
+      {/*<table className="table table-striped table-hover"> */}
+      <table className="table table-striped table-hover table-bordered">
         <thead className="table-dark">
           <tr>
             <th>Fecha</th>
